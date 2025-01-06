@@ -23,8 +23,8 @@ def get():
                      hx_swap = 'beforeend')
 
     tdlist = Ul(*todos(),id = "todo-list")
-    
-    return Titled("TODO LIST", Card(tdlist,header=frm ))
+    sort = Button(A('List',href='/lt'))
+    return Titled("TODO LIST", Card(tdlist,header=frm ), sort)
 
 @rt('/{tid}')
 def delete(tid:int):
@@ -48,5 +48,61 @@ def get(tid:int):
     todo.is_completed = not todo.is_completed
     todos.update(todo)
     return render(todo)
+
+@rt('/lt')
+def get():
+    back = Button(A('DashBoard',href='/'))
+    ct = Button(A('Completed Task',href='/ct')) 
+    pt = Button(A('Pending Task',href='/pt')) 
+    scd = Button(A('Sort By Creating Date',href='/scd')) 
+    sdd = Button(A('Sort By Due Date',href='/sdd')) 
+    return Titled("TODO LIST ITEMS", back ,
+                  Card(ct,' ',pt,' ',scd,' ',sdd),
+                    Ul(*todos(),id = "todo-list"))
+
+@rt('/ct')
+def get():
+    back = Button(A('Full List',href='/lt'))
+    ct = Button(A('Completed Task',href='/ct')) 
+    pt = Button(A('Pending Task',href='/pt')) 
+    scd = Button(A('Sort By Creating Date',href='/scd')) 
+    sdd = Button(A('Sort By Due Date',href='/sdd')) 
+    return Titled("Completed TASKS",back,
+                  Card(ct,' ',pt,' ',scd,' ',sdd), 
+                  Ul(*[todo for todo in todos() if todo.is_completed],id = "todo-list"))
+
+@rt('/pt')
+def get():
+    back = Button(A('Full List',href='/lt'))
+    ct = Button(A('Completed Task',href='/ct')) 
+    pt = Button(A('Pending Task',href='/pt')) 
+    scd = Button(A('Sort By Creating Date',href='/scd')) 
+    sdd = Button(A('Sort By Due Date',href='/sdd')) 
+    return Titled("Pending TASKS",back,
+                  Card(ct,' ',pt,' ',scd,' ',sdd), 
+                  Ul(*[todo for todo in todos() if not todo.is_completed ],id = "todo-list"))
+
+@rt('/scd')
+def get():
+    back = Button(A('Full List',href='/lt'))
+    ct = Button(A('Completed Task',href='/ct')) 
+    pt = Button(A('Pending Task',href='/pt')) 
+    scd = Button(A('Sort By Creating Date',href='/scd')) 
+    sdd = Button(A('Sort By Due Date',href='/sdd')) 
+    return Titled("SORTED BY CREATED DATE",back,
+                  Card(ct,' ',pt,' ',scd,' ',sdd), 
+                  Ul(*todos(order_by = 'c_date'),id = "todo-list"))
+
+@rt('/sdd')
+def get():
+    back = Button(A('Full List',href='/lt'))
+    ct = Button(A('Completed Task',href='/ct')) 
+    pt = Button(A('Pending Task',href='/pt')) 
+    scd = Button(A('Sort By Creating Date',href='/scd')) 
+    sdd = Button(A('Sort By Due Date',href='/sdd')) 
+    return Titled("SORTED BY CREATED DATE",back,
+                  Card(ct,' ',pt,' ',scd,' ',sdd), 
+                  Ul(*[todo for todo in todos(order_by = 'd_date') if todo.d_date],id = "todo-list"))
+
 
 serve()
