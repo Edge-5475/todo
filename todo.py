@@ -19,6 +19,7 @@ def get():
                     Input(name='body', placeholder ="Enter your Task"),
                     Input(name='c_date', type= 'date' ),
                     Input(name='d_date', type= 'date'),
+                    #Tags for the task had 4 different types 'dt' for DailyTask, 'pert' for PersonalTask, 'colt' for CollegeTask and 'wt' for WorkTask
                     Input(name='tag', placeholder ="Enter your Task Tag"),
                      Button('Add'),hx_post='/', target_id = "todo-list", 
                      hx_swap = 'beforeend')
